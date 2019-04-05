@@ -8,6 +8,8 @@ jQuery(document).ready(function ($) {
         $('#aim-body').html(html);
     }
 
+    function meaCreateModal(html)
+
     $('#aim-body').on('keyup', 'input[name = username]', function() {
         if($(this).val() != ''){
             $('input[name=password]').prop('disabled', false);
