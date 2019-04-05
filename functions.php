@@ -121,10 +121,13 @@ add_action( 'widgets_init', 'novelty_shoe_widgets_init' );
  */
 function novelty_shoe_scripts() {
 	wp_enqueue_style( 'novelty-shoe-style', get_stylesheet_uri() );
+	wp_enqueue_style( 'novelty-shoe-app', get_template_directory_uri() . "/css/app-styles.css", array('novelty-shoe-style'));
 
 	wp_enqueue_script( 'novelty-shoe-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
 	wp_enqueue_script( 'novelty-shoe-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
+
+	wp_enqueue_script('novelty-shoe-app', get_template_directory_uri() . '/js/app.js', array('jquery'));
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -159,3 +162,69 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+function novelty_shoe(){
+	
+	ob_start(); ?>
+
+		<div class="aim-header light-blue-background">
+			<img src="<?php echo get_template_directory_uri();?>/img/guy.png">
+			<h3>Sign On</h3>
+		</div>
+		<div id="aim-body">
+			<div class="aim-login">
+				<div id="login-graphic" class="blue-background">
+					<img src="<?php echo get_template_directory_uri(); ?>/img/guy-aol.png">
+				</div>
+	
+				<hr>
+				
+				<div class="bottom-section">
+					<form method="POST">
+						
+						<div>
+							<label for="username" class="blue italic bold">ScreenName</label><br />
+							<input type="text" name="username" id="username" />
+						</div>
+		
+						<div>
+							<label for="password">Password</label>
+							<input type="password" name="password" id="password" disabled />
+						</div>
+						<a href="#">Forgot Password?</a>
+						<div class="checkboxes flex space-between">
+							<div class="save-password">
+								<input type="checkbox" checked="checked"><label for="save-password" >Save password</label>
+							</div>
+							<div class="auto-login">
+								<input type="checkbox"><label for="auto-login">Auto-login</label>
+							</div>
+						</div>
+	
+						<div class="buttons flex space-between">
+							<div class="flex">
+								<div>
+									<img src="<?php echo get_template_directory_uri();?>/img/help-icon.png">
+									<p><span class="underline">H</span>elp</p>
+								</div>
+								<div style="margin-left:20px;">
+									<img src="<?php echo get_template_directory_uri();?>/img/half-setup.png">
+									<p>S<span class="underline">e</span>tup</p>
+								</div>
+							</div>
+							<div>
+								<img src="<?php echo get_template_directory_uri();?>/img/empty-guy.png " id="sign-on-image" data-root="<?php echo get_template_directory_uri(); ?>/img/">
+								<p class="bold"><span class="underline">S</span>ign On</p>
+							</div>
+						</div>
+					</form>
+					<p class="center" id="version">Version: 4.8.19</p>
+				</div>
+			</div>
+		</div>
+
+	<?php $response = ob_get_clean();
+	
+	return $response;
+}
+
+add_shortcode('novelty-shoe', 'novelty_shoe');

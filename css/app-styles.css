@@ -1,0 +1,120 @@
+#primary {
+    width: 90%;
+    max-width: 400px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: auto;
+    border: 3px solid #1160eb;
+    margin-top: 5%;
+    background: #ece9d6;
+}
+
+.flex {
+    display: flex;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.bold {
+    font-weight: 800;
+}
+
+.blue {
+    color: #0e378e;
+}
+
+.blue-background {
+    background: #0e378e;
+}
+
+.light-blue-background {
+    background: #1160eb;
+}
+
+#login-graphic {
+    /* width: 95%; */
+    position: relative;
+    margin: auto;
+    margin-top: 2.5%;
+    padding: 20px;
+}
+
+#login-graphic img {
+    width: auto;
+    display: block;
+    margin: auto
+}
+
+.aim-header {
+    display: flex;
+    justify-content: flex-start;
+    padding: 5px 15px;
+    align-items: flex-end;
+}
+
+.aim-header img {
+    max-height: 25px;
+}
+
+.aim-header h3 {
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-size: 20px!important;
+    margin-left: 5px;
+    line-height: 1;
+}
+
+#aim-body {
+    padding: 3px 3% 2%;
+}
+
+hr {
+    max-width: 95%;
+    margin: 10px auto;
+}
+
+.bottom-section {
+    padding: 0 2% 1%;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+}
+
+label {
+    margin-top: 5px;
+}
+
+.center {
+    text-align: center;
+}
+
+#version {
+    margin-bottom: 5px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons img {
+    max-height: 40px;
+    display: block;
+    margin: auto;
+}
+
+.buttons p {
+    margin: 0;
+    text-align: center;
+}
+
+.underline {
+    text-decoration: underline;
+}
