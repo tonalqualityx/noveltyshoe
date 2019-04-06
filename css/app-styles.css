@@ -1,3 +1,7 @@
+body {
+    min-height: 115vh;
+}
+
 #primary {
     width: 90%;
     max-width: 400px;
@@ -7,6 +11,42 @@
     border: 3px solid #1160eb;
     margin-top: 5%;
     background: #ece9d6;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    min-height: 200px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: 3px solid #1160eb;
+    background: #ece9d6;
+    z-index: 99;
+}
+
+.alert-button {
+    padding: 2% 4%;
+    margin: auto;
+    font-size: 1.25em;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#modal-image {
+    width: 33%;
+    margin-top: 5%;
+    padding: 15px;
+}
+
+#modal-text {
+    margin-top: 6%;
+    padding: 15px;
 }
 
 .flex {

@@ -190,7 +190,7 @@ function novelty_shoe(){
 							<label for="password">Password</label>
 							<input type="password" name="password" id="password" disabled />
 						</div>
-						<a href="#">Forgot Password?</a>
+						<a href="#" class="modal-trigger" data-modalType="help" data-content="Password clue" data-title="Password Hint" data-type="info">Forgot Password?</a>
 						<div class="checkboxes flex space-between">
 							<div class="save-password">
 								<input type="checkbox" checked="checked"><label for="save-password" >Save password</label>
