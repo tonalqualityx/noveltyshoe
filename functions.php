@@ -128,6 +128,12 @@ function novelty_shoe_scripts() {
 	wp_enqueue_script( 'novelty-shoe-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
 	wp_enqueue_script('novelty-shoe-app', get_template_directory_uri() . '/js/app.js', array('jquery'));
+	$app_data = array(
+		'ajaxurl' => admin_url('admin-ajax.php'),
+		'ajax_nonce' => wp_create_nonce('public_nonce'),
+	);
+	wp_localize_script('novelty-shoe-app', 'novelty', $app_data);
+
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -178,7 +184,7 @@ function novelty_shoe(){
 	
 				<hr>
 				
-				<div class="bottom-section">
+				<div id="aim-content" class="bottom-section">
 					<form method="POST">
 						
 						<div>
@@ -202,7 +208,7 @@ function novelty_shoe(){
 	
 						<div class="buttons flex space-between">
 							<div class="flex">
-								<div>
+								<div class="modal-trigger" data-type="info" data-content="<p>You know the drill:</p><ol><li>Get Older</li><li>Solve Puzzles</li><li>Have Fun</li></ol>" data-title="Help">
 									<img src="<?php echo get_template_directory_uri();?>/img/help-icon.png">
 									<p><span class="underline">H</span>elp</p>
 								</div>
@@ -222,9 +228,100 @@ function novelty_shoe(){
 			</div>
 		</div>
 
+		<div class="templates">
+
+			<div id="modal-template" class="modal template">
+				<div class="aim-header light-blue-background">
+					<h3>Alert</h3>
+				</div>
+				<div class="flex modal-content align-center">
+					<div class="modal-image">
+						<img src="/wp-content/themes/noveltyshoe/img/help.png">
+					</div>
+					<div class="modal-text">
+						
+					</div>
+				</div>
+				<div>
+					<button class="alert-button">Clone</button>
+				</div>
+			</div>
+
+			<div class="buddy-list">
+				<ul class="tabs flex">
+					<li class="active-tab" data-target="online">Online</li>
+					<li data-target="offline">Offline</li>
+				</ul>
+				<div class="buddies">
+					<div class="online list active">
+						<ul class="categories">
+							<li>
+								<span class="drilldown">&#9658;</span>Buddies (1/93)
+								<ul class="buddy-list-members"><li data-user='Docdion'>Docdion (away)</li></ul>
+							</li>
+						</ul>
+					</div>
+					<div class="offline list">
+						<ul>
+							<li>Seriously? Go talk to the people online.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div id="chat-window" class="chat-window">
+				<div class="aim-header light-blue-background">
+					<h3></h3>
+				</div>
+				<div class="chat-contents">
+					<div class="chat-screen">
+						
+					</div>
+					<div class="tools">
+						tools...
+					</div>
+					<textarea class="send-message" disabled="disabled"></textarea>
+					<div class="chat-buttons flex space-between">
+						<div class="flex justify-center" style="flex-grow:9999">
+							<img src="<?php echo get_template_directory_uri(); ?>/img/i-info.png" style="height:40px;">
+						</div>
+						<div class="flex justify-center" style="width:75px;border-left: 1px solid #999;">
+							<img src="<?php echo get_template_directory_uri();?>/img/send.png">
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
 	<?php $response = ob_get_clean();
 	
 	return $response;
 }
 
 add_shortcode('novelty-shoe', 'novelty_shoe');
+
+function novelty_feed(){
+	$discussion = get_posts(array('numberposts' => -1, 'post_type' => 'discussion', 'order' => 'ASC'));
+	$response = array();
+	foreach($discussion as $message){
+		$sender = get_post_meta( $message->ID, 'wpcf-sender', TRUE);
+		$seen = get_post_meta( $message->ID, 'wpcf-seen', TRUE);
+		$response[$seen][] = array( 
+			'message' => $message->post_content,
+			'sender' => get_post_meta( $message->ID, 'wpcf-sender', TRUE),
+			'clue' => get_post_meta( $message->ID, 'wpcf-has-clue', TRUE),
+			'answer' => get_post_meta( $message->ID, 'wpcf-answer', TRUE),
+			'seen' => get_post_meta( $message->ID, 'wpcf-seen', TRUE),
+			'delay' => get_post_meta( $message->ID, 'wpcf-delay', TRUE ),
+		);
+	}
+	$response = json_encode($response);
+	echo $response;
+	die();
+}
+
+
+add_action('wp_ajax_novelty_feed', 'novelty_feed');
+add_action('wp_ajax_nopriv_novelty_feed', 'novelty_feed');
+

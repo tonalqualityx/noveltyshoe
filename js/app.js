@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
 
-    var root = "/wordpress/wp-content/themes/noveltyshoe";
+    var root = "/wp-content/themes/noveltyshoe";
 
     function meaUpdateHeader(newText){
         $('.aim-header h3').text(newText);
@@ -11,19 +11,64 @@ jQuery(document).ready(function ($) {
     }
 
     function meaCreateModal(html, title = 'Alert', type = 'error'){
-        
-        image = "<img src='" + root + "/img";
 
+        var theAlert = $('#modal-template').clone();
+        $(theAlert).appendTo('body');
+
+        //setup the image
+        image = root + "/img";
         if(type == 'info'){
             image += "/help.png";
         } else {
             image += "/error.png";
         }
 
-        image += "'>";
+        theAlert.find('img').attr('src', image);
+        theAlert.find('.modal-text').html(html);
+        theAlert.find('.aim-header h3').text(title);
 
-        $('body').prepend("<div class='modal'><div class='aim-header light-blue-background'><h3>" + title + "</h3></div><div class='flex modal-content'><div id='modal-image'>" + image + "</div><div id='modal-text'>" + html + "</div></div><div><button class='alert-button'>OK</button></div></div>");
+        theAlert.removeClass('template');
+        // $('body').prepend("<div class='modal'><div class='aim-header light-blue-background'><h3>" + title + "</h3></div><div class='flex modal-content align-center'><div class='modal-image'>" + image + "</div><div class='modal-text'>" + html + "</div></div><div><button class='alert-button'>OK</button></div></div>");
     }
+
+    function meaBuddyList() {
+        var buddyList = $('.buddy-list').clone();
+        $('#aim-content').html(buddyList);
+    }
+
+    function meaDoChat(messages) {
+        var length = messages.length;
+        var messages = $.parseJSON(messages);
+        var i = 1;
+        $('.chat-screen').append("<p><span class='me'>" + messages[0][0].sender + ":</span> " + messages[0][0].message + "</p>");
+        meaChatDelay(messages,i,length);
+
+        function meaChatDelay(messages, i, length){
+            setTimeout(function() {
+                var senderClass = "me";
+                // console.log(messages[0][i]);
+                if(messages[0][i].sender != 'Purposefull7'){
+                    senderClass = "friend";
+                }
+                $('.chat-screen').append("<p><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
+                $('#active-chat').scrollTop($('#active-chat')[0].scrollHeight);
+                i++;
+                console.log(messages);
+                if(messages[0][i].clue == '1'){
+                    console.log('true');
+                    $('.send-message').attr('disabled', false);
+                    return;
+                } else if(--length){
+                    meaChatDelay(messages, i, length);
+                }
+            }, messages[0][i].delay);
+        }
+    }
+    
+
+    meaBuddyList();
+
+    //Triggers
 
     $('#aim-body').on('keyup', 'input[name = username]', function() {
         if($(this).val() != ''){
@@ -36,9 +81,9 @@ jQuery(document).ready(function ($) {
     $('#aim-body').on('keyup', 'input[name = password]', function () {
         var root = $('#sign-on-image').data('root');
         if ($(this).val() != '') {
-            $('#sign-on-image').attr('src', root + 'green-guy.png');
+            $('#sign-on-image').attr('src', root + 'green-guy.png').addClass('active');
         } else {
-            $('#sign-on-image').attr('src', root + 'empty-guy.png');
+            $('#sign-on-image').attr('src', root + 'empty-guy.png').removeClass('active');
         }
     });
 
@@ -51,11 +96,62 @@ jQuery(document).ready(function ($) {
     });
 
     $('body').on('click', '.alert-button', function() {
-        $('.modal').remove();
+        $(this).parents('.modal').remove();
     });
 
     $('body').on('click', '#sign-on-image.active', function() {
-        meaCreateModal('That password is incorrect.');
+        
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var response = '';
+
+        if(username != 'purposefull7'){
+            response = "Your username is incorrect";
+        } else if (password != '123') {
+            response = "That password sucks.";
+        } else {
+            meaBuddyList();
+            return;
+        }
+        
+        meaCreateModal(response);
+    });
+
+    $('#aim-body').on('click', '.buddy-list .tabs li', function() {
+
+        var target = $(this).data('target');
+        $('.list').removeClass('active');
+        $("." + target).addClass('active');
+
+        $('.buddy-list .tabs li').removeClass('active-tab');
+        $(this).addClass('active-tab');
+    });
+
+    $('#aim-body').on('click', '.categories li', function() {
+        $(this).find('.drilldown').toggleClass('drilldown-open');
+        $(this).find('.buddy-list-members').slideToggle();
+    });
+
+    $('#aim-body').on('click', '.buddy-list-members li', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var chat = $('#chat-window').clone();
+        chat.find('.aim-header h3').text($(this).data('user'));
+        chat.find('.chat-screen').attr('id', 'active-chat');
+        chat.prependTo('body');
+
+        $.ajax({
+            url: novelty.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'novelty_feed',
+            },
+            type: 'POST',
+            success: function (response) {
+                meaDoChat(response);
+            }
+        });
     });
 
 });

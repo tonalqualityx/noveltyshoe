@@ -2,6 +2,16 @@ body {
     min-height: 115vh;
 }
 
+ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.templates {
+    display: none;
+}
+
 #primary {
     width: 90%;
     max-width: 400px;
@@ -38,19 +48,27 @@ body {
     margin-bottom: 20px;
 }
 
-#modal-image {
+.modal-image {
     width: 33%;
     margin-top: 5%;
     padding: 15px;
 }
 
-#modal-text {
+.modal-text {
     margin-top: 6%;
     padding: 15px;
 }
 
 .flex {
     display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
 }
 
 .space-between {
@@ -115,6 +133,10 @@ body {
     padding: 3px 3% 2%;
 }
 
+ol, ul {
+    margin-left: 0.1em;
+}
+
 hr {
     max-width: 95%;
     margin: 10px auto;
@@ -157,4 +179,111 @@ label {
 
 .underline {
     text-decoration: underline;
+}
+
+/***********
+BUDDY LIST
+************/
+
+.buddy-list .tabs {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    align-items: flex-end;
+    margin-bottom: -1px;
+}
+
+.buddy-list .tabs li{
+    margin: 0;
+    padding: 5px 10px;
+    border: 1px solid #666;
+    border-radius: 2px;
+    border-top-left-radius: 8px;
+    background: #ecead6;
+}
+
+.buddy-list .tabs li.active-tab {
+    padding: 7px 10px;
+    border-bottom: none;
+}
+
+.buddies {
+    padding: 8px;
+    border: 1px solid #666;
+}
+
+.buddies .online, .buddies .offline {
+    display: none;
+    background: #fff;
+    min-height: 300px;
+    border: 1px solid #666;
+}
+
+.online.active, .offline.active {
+    display: block;
+}
+
+.drilldown {
+    display: inline-block;
+    transition: transform 0.35s; 
+    margin-right: 5px;
+}
+
+.drilldown.drilldown-open {
+    transform: rotate(90deg);
+}
+
+.buddy-list-members {
+    display: none;
+    padding-left: 15px;
+}
+
+/***********
+CHAT WINDOW
+***********/
+
+.chat-window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    height: 400px;
+    width: 100%;
+    max-width: 450px;
+    background: #ecead6;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: 3px solid #1160eb;
+    z-index: 95;
+}
+
+.chat-contents{
+    padding: 6px;
+}
+
+.chat-screen {
+    background: white;
+    overflow: auto;
+    width: 100%;
+    height: 220px;
+}
+
+.chat-buttons img {
+    max-height: 40px;
+}
+
+.chat-screen p {
+    margin: 2.5px;
+}
+
+.friend, .me {
+    font-weight: 800;
+}
+
+.chat-screen .friend {
+    color: #2a2ac6;
+}
+
+.chat-screen .me {
+    color: #a82121;
 }
