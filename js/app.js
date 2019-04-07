@@ -55,18 +55,22 @@ jQuery(document).ready(function ($) {
         console.log(messages);
         i = 0;
         var seen = 0;
-        $.each(messages[1], function() {
-            var senderClass = "me";
-            if (messages[1][seen].sender != 'Purposefull7') {
-                senderClass = "friend";
-            }
-            $('.chat-screen').append("<p><span class='" + senderClass +"'>" + messages[1][seen].sender + ":</span> " + messages[1][seen].message + "</p>");
-            
-            seen++;
-        });
-        $('#active-chat .chat-screen').scrollTop($('#active-chat .chat-screen')[0].scrollHeight);
+        if(typeof messages[1] !== 'undefined' && messages[1].length > 0){
+            $.each(messages[1], function() {
+                var senderClass = "me";
+                if (messages[1][seen].sender != 'Purposefull7') {
+                    senderClass = "friend";
+                }
+                $('.chat-screen').append("<p data-answer='" + messages[1][seen].answer + "'><span class='" + senderClass +"'>" + messages[1][seen].sender + ":</span> " + messages[1][seen].message + "</p>");
+                
+                seen++;
+            });
+            $('.send-message').attr('disabled', false);
+            $('#active-chat .chat-screen').scrollTop($('#active-chat .chat-screen')[0].scrollHeight);
+        } else {
+            meaChatDelay();
+        }
 
-        meaChatDelay();
 
     }
 
@@ -104,9 +108,6 @@ jQuery(document).ready(function ($) {
             }
         }, messages[0][i].delay);
     }
-    
-
-    meaBuddyList();
 
     //Triggers
 
