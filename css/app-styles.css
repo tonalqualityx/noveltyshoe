@@ -248,7 +248,7 @@ CHAT WINDOW
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     height: 400px;
-    width: 100%;
+    width: 99%;
     max-width: 450px;
     background: #ecead6;
     border-top-left-radius: 10px;

@@ -1,6 +1,14 @@
 jQuery(document).ready(function ($) {
 
-    var root = "/wp-content/themes/noveltyshoe";
+    var root = "/wp-content/themes/noveltyshoe"; //set the root for portability
+
+    //setup the tones
+    var sent = document.createElement('audio');
+    sent.setAttribute('src', root + '/audio/imsend.wav');
+
+    var received = document.createElement('audio');
+    received.setAttribute('src', root + '/audio/received.mp3');
+
 
     function meaUpdateHeader(newText){
         $('.aim-header h3').text(newText);
@@ -36,33 +44,65 @@ jQuery(document).ready(function ($) {
         $('#aim-content').html(buddyList);
     }
 
-    function meaDoChat(messages) {
-        var length = messages.length;
-        var messages = $.parseJSON(messages);
-        var i = 1;
-        $('.chat-screen').append("<p><span class='me'>" + messages[0][0].sender + ":</span> " + messages[0][0].message + "</p>");
-        meaChatDelay(messages,i,length);
+    //Set a bunch of globals...
+    var i = 0;
+    var messages = new Array();
+    var length = 0;
 
-        function meaChatDelay(messages, i, length){
-            setTimeout(function() {
-                var senderClass = "me";
-                // console.log(messages[0][i]);
-                if(messages[0][i].sender != 'Purposefull7'){
-                    senderClass = "friend";
+    function meaDoChat(response) {
+        length = response.length;
+        messages = $.parseJSON(response);
+        console.log(messages);
+        i = 0;
+        var seen = 0;
+        $.each(messages[1], function() {
+            var senderClass = "me";
+            if (messages[1][seen].sender != 'Purposefull7') {
+                senderClass = "friend";
+            }
+            $('.chat-screen').append("<p><span class='" + senderClass +"'>" + messages[1][seen].sender + ":</span> " + messages[1][seen].message + "</p>");
+            
+            seen++;
+        });
+        $('#active-chat .chat-screen').scrollTop($('#active-chat .chat-screen')[0].scrollHeight);
+
+        meaChatDelay();
+
+    }
+
+    function meaChatDelay(){
+        setTimeout(function() {
+            var senderClass = "me";
+            if(messages[0][i].sender != 'Purposefull7'){
+                senderClass = "friend";
+                received.play();
+            } else {
+                sent.play();
+            }
+            $('.chat-screen').append("<p data-answer='" + messages[0][i].answer + "'><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
+            $.ajax({
+                url: novelty.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'novelty_update_seen',
+                    post: messages[0][i].post,
+                },
+                type: 'POST',
+                success: function (response) {
+                    console.log(response);
                 }
-                $('.chat-screen').append("<p><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
-                $('#active-chat').scrollTop($('#active-chat')[0].scrollHeight);
-                i++;
-                console.log(messages);
-                if(messages[0][i].clue == '1'){
-                    console.log('true');
-                    $('.send-message').attr('disabled', false);
-                    return;
-                } else if(--length){
-                    meaChatDelay(messages, i, length);
-                }
-            }, messages[0][i].delay);
-        }
+            });
+            $('#active-chat .chat-screen').scrollTop($('#active-chat .chat-screen')[0].scrollHeight);
+            i++;
+            console.log(messages);
+            if(messages[0][i-1].clue == '1'){
+                $('.send-message').attr('disabled', false);
+                return;
+            } else if(--length){
+                meaChatDelay();
+            }
+        }, messages[0][i].delay);
     }
     
 
@@ -137,7 +177,7 @@ jQuery(document).ready(function ($) {
         e.stopPropagation();
         var chat = $('#chat-window').clone();
         chat.find('.aim-header h3').text($(this).data('user'));
-        chat.find('.chat-screen').attr('id', 'active-chat');
+        chat.attr('id', 'active-chat');
         chat.prependTo('body');
 
         $.ajax({
@@ -154,4 +194,32 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    $('body').on('click', '.aim-send', function() {
+        var answer = $('#active-chat p:last-child').data('answer');
+        var guess = $('#active-chat textarea').val();
+        console.log(answer + " " + guess);
+        if(guess == answer){
+            $('#active-chat textarea').val('').attr('disabled','disabled');
+            meaChatDelay(messages, i, length);
+        } else {
+            meaCreateModal('WRONG!');
+        }
+    });
+
 });
+
+function resetSeen(){
+    jQuery.ajax({
+        url: novelty.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'novelty_reset_seen',
+        },
+        type: 'POST',
+        success: function (response) {
+            response = jQuery.parseJSON(response)
+            console.log(response);
+        }
+    });
+}

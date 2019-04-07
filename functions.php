@@ -243,7 +243,7 @@ function novelty_shoe(){
 					</div>
 				</div>
 				<div>
-					<button class="alert-button">Clone</button>
+					<button class="alert-button">OK</button>
 				</div>
 			</div>
 
@@ -257,7 +257,7 @@ function novelty_shoe(){
 						<ul class="categories">
 							<li>
 								<span class="drilldown">&#9658;</span>Buddies (1/93)
-								<ul class="buddy-list-members"><li data-user='Docdion'>Docdion (away)</li></ul>
+								<ul class="buddy-list-members"><li data-user='docdion'>docdion (away)</li></ul>
 							</li>
 						</ul>
 					</div>
@@ -285,7 +285,7 @@ function novelty_shoe(){
 						<div class="flex justify-center" style="flex-grow:9999">
 							<img src="<?php echo get_template_directory_uri(); ?>/img/i-info.png" style="height:40px;">
 						</div>
-						<div class="flex justify-center" style="width:75px;border-left: 1px solid #999;">
+						<div class="flex justify-center aim-send" style="width:75px;border-left: 1px solid #999;">
 							<img src="<?php echo get_template_directory_uri();?>/img/send.png">
 						</div>
 					</div>
@@ -314,6 +314,7 @@ function novelty_feed(){
 			'answer' => get_post_meta( $message->ID, 'wpcf-answer', TRUE),
 			'seen' => get_post_meta( $message->ID, 'wpcf-seen', TRUE),
 			'delay' => get_post_meta( $message->ID, 'wpcf-delay', TRUE ),
+			'post' => $message->ID,
 		);
 	}
 	$response = json_encode($response);
@@ -321,7 +322,29 @@ function novelty_feed(){
 	die();
 }
 
-
 add_action('wp_ajax_novelty_feed', 'novelty_feed');
 add_action('wp_ajax_nopriv_novelty_feed', 'novelty_feed');
 
+function novelty_update_seen(){
+	$post_id = $_POST['post'];
+	$response = update_post_meta( $post_id, 'wpcf-seen', 1 );
+	echo $response;
+	die();
+}
+
+add_action('wp_ajax_novelty_update_seen', 'novelty_update_seen');
+add_action('wp_ajax_nopriv_novelty_update_seen', 'novelty_update_seen');
+
+function novelty_reset_seen() {
+	$discussion = get_posts(array('numberposts' => -1, 'post_type' => 'discussion', 'order' => 'ASC'));
+	$results = array();
+	foreach($discussion as $v){
+		$results[] = update_post_meta($v->ID, 'wpcf-seen', 0);
+	}
+	$response = json_encode( $results );
+	echo $response;
+	die(); 
+}
+
+add_action('wp_ajax_novelty_reset_seen', 'novelty_reset_seen');
+add_action('wp_ajax_nopriv_novelty_reset_seen', 'novelty_reset_seen');
