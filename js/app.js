@@ -90,7 +90,7 @@ jQuery(document).ready(function ($) {
             $('.chat-screen').append("<p data-answer='" + messages[0][i].answer + "'><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
             $.ajax({
                 url: novelty.ajaxurl,
-                dataType: 'json',
+                dataType: 'text',
                 method: 'POST',
                 data: {
                     action: 'novelty_update_seen',
@@ -145,6 +145,12 @@ jQuery(document).ready(function ($) {
     });
 
     $('body').on('click', '#sign-on-image.active', function() {
+
+        sent = document.createElement('audio');
+        sent.setAttribute('src', root + '/audio/imsend.wav');
+
+        received = document.createElement('audio');
+        received.setAttribute('src', root + '/audio/received.mp3');
         
         var username = $('#username').val();
         var password = $('#password').val();
@@ -187,7 +193,7 @@ jQuery(document).ready(function ($) {
 
         $.ajax({
             url: novelty.ajaxurl,
-            dataType: 'json',
+            dataType: 'text',
             method: 'POST',
             data: {
                 action: 'novelty_feed',
