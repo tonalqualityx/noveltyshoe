@@ -146,9 +146,9 @@ jQuery(document).ready(function ($) {
         var password = $('#password').val();
         var response = '';
 
-        if(username != 'purposefull7'){
+        if(username.toLowerCase() != 'purposefull7'.toLowerCase()){
             response = "Your username is incorrect";
-        } else if (password != '123') {
+        } else if (password.toLowerCase() != 'pants'.toLowerCase()) {
             response = "That password sucks.";
         } else {
             meaBuddyList();
@@ -199,7 +199,7 @@ jQuery(document).ready(function ($) {
         var answer = $('#active-chat p:last-child').data('answer');
         var guess = $('#active-chat textarea').val();
         console.log(answer + " " + guess);
-        if(guess == answer){
+        if(guess.toLowerCase() == answer.toLowerCase()){
             $('#active-chat textarea').val('').attr('disabled','disabled');
             meaChatDelay(messages, i, length);
         } else {

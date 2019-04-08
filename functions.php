@@ -196,7 +196,7 @@ function novelty_shoe(){
 							<label for="password">Password</label>
 							<input type="password" name="password" id="password" disabled />
 						</div>
-						<a href="#" class="modal-trigger" data-modalType="help" data-content="Password clue" data-title="Password Hint" data-type="info">Forgot Password?</a>
+						<a href="#" class="modal-trigger" data-modalType="help" data-content="The funniest word in the english language." data-title="Password Hint" data-type="info">Forgot Password?</a>
 						<div class="checkboxes flex space-between">
 							<div class="save-password">
 								<input type="checkbox" checked="checked"><label for="save-password" >Save password</label>
@@ -208,7 +208,7 @@ function novelty_shoe(){
 	
 						<div class="buttons flex space-between">
 							<div class="flex">
-								<div class="modal-trigger" data-type="info" data-content="<p>You know the drill:</p><ol><li>Get Older</li><li>Solve Puzzles</li><li>Have Fun</li></ol>" data-title="Help">
+								<div class="modal-trigger" data-type="info" data-content="<p>You know the drill:</p><ol><li>Get Older</li><li>Solve Puzzles</li><li>Have Fun</li></ol><p style='font-style:italic'>Note: assume the first letter of each line (not word) is capitalized.</p>" data-title="Help">
 									<img src="<?php echo get_template_directory_uri();?>/img/help-icon.png">
 									<p><span class="underline">H</span>elp</p>
 								</div>
