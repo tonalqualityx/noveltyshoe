@@ -54,13 +54,14 @@ jQuery(document).ready(function ($) {
     var length = 0;
 
     function meaDoChat(response) {
-        length = response.length;
+        length = response[0].length;
         // messages = $.parseJSON(response);
+        // console.log(response);
         messages = response;
-        console.log(messages);
         i = 0;
         var seen = 0;
         if(typeof messages[1] !== 'undefined' && messages[1].length > 0){
+            console.log('true');
             $.each(messages[1], function() {
                 var senderClass = "me";
                 if (messages[1][seen].sender != 'Purposefull7') {
@@ -75,8 +76,6 @@ jQuery(document).ready(function ($) {
         } else {
             meaChatDelay();
         }
-
-
     }
 
     function meaChatDelay(){
@@ -91,27 +90,29 @@ jQuery(document).ready(function ($) {
             $('.chat-screen').append("<p data-answer='" + messages[0][i].answer + "'><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
             $.ajax({
                 url: novelty.ajaxurl,
-                dataType: 'json',
+                dataType: 'text',
                 method: 'POST',
                 data: {
                     action: 'novelty_update_seen',
                     post: messages[0][i].post,
                 },
                 type: 'POST',
-                success: function (response) {
-                    console.log(response);
-                }
+                // success: function (response) {
+                //     // console.log(response);
+                // }
             });
             $('#active-chat .chat-screen').scrollTop($('#active-chat .chat-screen')[0].scrollHeight);
             i++;
             console.log(messages);
+            
             if(messages[0][i-1].clue == '1'){
+                console.log('return');
                 $('.send-message').attr('disabled', false);
                 return;
             } else if(--length){
                 meaChatDelay();
-            }
-        }, messages[0][i].delay);
+            } else { console.log('FAIL!');}
+        }, parseInt(messages[0][i].delay));
     }
 
     //Triggers
