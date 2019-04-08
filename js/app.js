@@ -9,6 +9,8 @@ jQuery(document).ready(function ($) {
     var received = document.createElement('audio');
     received.setAttribute('src', root + '/audio/received.mp3');
 
+    
+
 
     function meaUpdateHeader(newText){
         $('.aim-header h3').text(newText);
@@ -19,9 +21,11 @@ jQuery(document).ready(function ($) {
     }
 
     function meaCreateModal(html, title = 'Alert', type = 'error'){
-
         var theAlert = $('#modal-template').clone();
         $(theAlert).appendTo('body');
+        var error = document.createElement('audio');
+        error.setAttribute('src', root + '/audio/erro.mp3');
+        error.play();
 
         //setup the image
         image = root + "/img";
@@ -86,7 +90,7 @@ jQuery(document).ready(function ($) {
             $('.chat-screen').append("<p data-answer='" + messages[0][i].answer + "'><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
             $.ajax({
                 url: novelty.ajaxurl,
-                dataType: 'text',
+                dataType: 'json',
                 method: 'POST',
                 data: {
                     action: 'novelty_update_seen',
@@ -183,7 +187,7 @@ jQuery(document).ready(function ($) {
 
         $.ajax({
             url: novelty.ajaxurl,
-            dataType: 'text',
+            dataType: 'json',
             method: 'POST',
             data: {
                 action: 'novelty_feed',
