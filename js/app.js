@@ -55,7 +55,8 @@ jQuery(document).ready(function ($) {
 
     function meaDoChat(response) {
         length = response.length;
-        messages = $.parseJSON(response);
+        // messages = $.parseJSON(response);
+        messages = response;
         console.log(messages);
         i = 0;
         var seen = 0;
@@ -90,7 +91,7 @@ jQuery(document).ready(function ($) {
             $('.chat-screen').append("<p data-answer='" + messages[0][i].answer + "'><span class='" + senderClass +"'>" + messages[0][i].sender + ":</span> " + messages[0][i].message + "</p>");
             $.ajax({
                 url: novelty.ajaxurl,
-                dataType: 'text',
+                dataType: 'json',
                 method: 'POST',
                 data: {
                     action: 'novelty_update_seen',
@@ -193,13 +194,14 @@ jQuery(document).ready(function ($) {
 
         $.ajax({
             url: novelty.ajaxurl,
-            dataType: 'text',
+            dataType: 'JSON',
             method: 'POST',
             data: {
                 action: 'novelty_feed',
             },
             type: 'POST',
             success: function (response) {
+                // console.log(response);
                 meaDoChat(response);
             }
         });

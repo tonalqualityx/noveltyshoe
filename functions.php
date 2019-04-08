@@ -278,7 +278,7 @@ function novelty_shoe(){
 						
 					</div>
 					<div class="tools">
-						tools...
+						&nbsp;
 					</div>
 					<textarea class="send-message" disabled="disabled"></textarea>
 					<div class="chat-buttons flex space-between">
