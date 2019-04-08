@@ -208,7 +208,7 @@ function novelty_shoe(){
 	
 						<div class="buttons flex space-between">
 							<div class="flex">
-								<div class="modal-trigger" data-type="info" data-content="<p>You know the drill:</p><ol><li>Get Older</li><li>Solve Puzzles</li><li>Have Fun</li></ol><p style='font-style:italic'>Note: assume the first letter of each line (not word) is capitalized.</p>" data-title="Help">
+								<div class="modal-trigger" data-type="info" data-content="<p>You know the drill:</p><ol><li>Get Older</li><li>Solve Puzzles</li><li>Have Fun</li></ol>" data-title="Help">
 									<img src="<?php echo get_template_directory_uri();?>/img/help-icon.png">
 									<p><span class="underline">H</span>elp</p>
 								</div>
